@@ -27,3 +27,28 @@ class Knight
     }
   end
 end
+
+# This class calculates a traversal on a chessboard
+class TraversalProccesor
+  def initialize(args)
+    @starting_position = args[:starting_position]
+    @end_position = args[:end_position]
+    @traversal_board = args[:board]
+  end
+end
+
+# This module is a wrapper for the class TraversalProccesor class
+module TraversalProccesorWrapper
+  def self.traversal_proccesor(move, board)
+    TraversalProccesor.new(
+      starting_position: move[:starting_position],
+      end_position: move[:end_position],
+      board:
+    )
+  end
+end
+
+p TraversalProccesorWrapper.traversal_proccesor(
+  Knight.new.knight_moves('d4', 'b5'),
+  ChessBoard.new.board
+)
