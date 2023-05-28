@@ -41,6 +41,13 @@ class TraversalProccesor
 
   private
 
+  def column
+    traversal_board.each do |arr|
+      column = arr.index(starting_position)
+      return column unless column.nil?
+    end
+  end
+
   def row
     traversal_board.index { |arr| arr.include?(starting_position) }
   end
