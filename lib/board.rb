@@ -39,6 +39,38 @@ class TraversalProccesor
     @traversal_board = args[:board]
   end
 
+  def possible_moves
+    traverse(traversal_board).to_a.sort
+  end
+
+  def traverse(board, visited = Set.new, r = row, c = column)
+    return nil if r.negative? || r > board.length - 1
+    return nil if c.negative? || c > board.length - 1
+
+    position = [r, c]
+    return visited if visited.include?(position)
+
+    visited << position
+    return visited if board[r][c] == end_position
+
+    # traverse(board, visited, r + 2, c + 1) if r <= 5 && c <= 6
+    # traverse(board, visited, r + 2, c - 1) if r <= 5 && c >= 1
+    # traverse(board, visited, r - 2, c + 1) if r >= 2 && c <= 6
+    # traverse(board, visited, r - 2, c - 1) if r >= 2 && c >= 1
+    # traverse(board, visited, r + 1, c + 2) if r <= 6 && c <= 5
+    # traverse(board, visited, r + 1, c - 2) if r <= 6 && c >= 2
+    # traverse(board, visited, r - 1, c + 2) if r >= 1 && c <= 5
+    # traverse(board, visited, r - 1, c - 2) if r >= 1 && c >= 2
+    traverse(board, visited, r + 2, c + 1)
+    traverse(board, visited, r + 2, c - 1)
+    traverse(board, visited, r - 2, c + 1)
+    traverse(board, visited, r - 2, c - 1)
+    traverse(board, visited, r + 1, c + 2)
+    traverse(board, visited, r + 1, c - 2)
+    traverse(board, visited, r - 1, c + 2)
+    traverse(board, visited, r - 1, c - 2)
+  end
+
   private
 
   def column
@@ -67,4 +99,4 @@ end
 p TraversalProccesorWrapper.traversal_proccesor(
   Knight.new.knight_moves('d4', 'b5'),
   ChessBoard.new.board
-)
+).possible_moves
