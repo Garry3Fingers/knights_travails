@@ -30,10 +30,19 @@ end
 
 # This class calculates a traversal on a chessboard
 class TraversalProccesor
+  attr_reader :traversal_board
+  attr_accessor :starting_position, :end_position
+
   def initialize(args)
     @starting_position = args[:starting_position]
     @end_position = args[:end_position]
     @traversal_board = args[:board]
+  end
+
+  private
+
+  def row
+    traversal_board.index { |arr| arr.include?(starting_position) }
   end
 end
 
