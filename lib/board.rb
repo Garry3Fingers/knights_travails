@@ -39,39 +39,46 @@ class TraversalProccesor
     @traversal_board = args[:board]
   end
 
-  def possible_moves
-    traverse(traversal_board).to_a.sort
-  end
-
-  def traverse(board, visited = Set.new, r = row, c = column)
-    return nil if r.negative? || r > board.length - 1
-    return nil if c.negative? || c > board.length - 1
-
-    position = [r, c]
-    return visited if visited.include?(position)
-
-    visited << position
-    return visited if board[r][c] == end_position
-
-    # traverse(board, visited, r + 2, c + 1) if r <= 5 && c <= 6
-    # traverse(board, visited, r + 2, c - 1) if r <= 5 && c >= 1
-    # traverse(board, visited, r - 2, c + 1) if r >= 2 && c <= 6
-    # traverse(board, visited, r - 2, c - 1) if r >= 2 && c >= 1
-    # traverse(board, visited, r + 1, c + 2) if r <= 6 && c <= 5
-    # traverse(board, visited, r + 1, c - 2) if r <= 6 && c >= 2
-    # traverse(board, visited, r - 1, c + 2) if r >= 1 && c <= 5
-    # traverse(board, visited, r - 1, c - 2) if r >= 1 && c >= 2
-    traverse(board, visited, r + 2, c + 1)
-    traverse(board, visited, r + 2, c - 1)
-    traverse(board, visited, r - 2, c + 1)
-    traverse(board, visited, r - 2, c - 1)
-    traverse(board, visited, r + 1, c + 2)
-    traverse(board, visited, r + 1, c - 2)
-    traverse(board, visited, r - 1, c + 2)
-    traverse(board, visited, r - 1, c - 2)
+  def print_path
+    find_path.each_pair { |key, value| puts "#{key}: #{value}" }
   end
 
   private
+
+  def find_path
+    arr = traverse(traversal_board).last.flatten
+    path = {}
+    until arr.empty?
+      c = arr.pop
+      r = arr.pop
+      path[traversal_board[r][c]] = [r, c]
+    end
+    path
+  end
+
+  def traverse(board, visited = [], r = row, c = column)
+    queue = [[r, c]]
+
+    until queue.empty?
+      current = queue.shift
+      next if current.first.negative? ||
+              current.first > board.length - 1 ||
+              current[1].negative? ||
+              current[1] > board.length - 1
+
+      visited << current
+      return visited if board[current.first][current[1]] == end_position
+
+      queue.push([current.first + 2, current[1] + 1, current])
+      queue.push([current.first + 2, current[1] - 1, current])
+      queue.push([current.first - 2, current[1] + 1, current])
+      queue.push([current.first - 2, current[1] - 1, current])
+      queue.push([current.first + 1, current[1] + 2, current])
+      queue.push([current.first + 1, current[1] - 2, current])
+      queue.push([current.first - 1, current[1] + 2, current])
+      queue.push([current.first - 1, current[1] - 2, current])
+    end
+  end
 
   def column
     traversal_board.each do |arr|
@@ -96,7 +103,7 @@ module TraversalProccesorWrapper
   end
 end
 
-p TraversalProccesorWrapper.traversal_proccesor(
-  Knight.new.knight_moves('d4', 'b5'),
+TraversalProccesorWrapper.traversal_proccesor(
+  Knight.new.knight_moves('d4', 'a1'),
   ChessBoard.new.board
-).possible_moves
+).print_path
