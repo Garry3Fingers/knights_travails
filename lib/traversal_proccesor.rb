@@ -4,7 +4,7 @@ require_relative 'board'
 require_relative 'knight'
 
 # This class calculates a traversal on a chessboard
-class TraversalProccesor
+class TraversalProcessor
   attr_reader :traversal_board
   attr_accessor :starting_position, :end_position
 
@@ -68,9 +68,9 @@ class TraversalProccesor
 end
 
 # This module is a wrapper for the class TraversalProccesor class
-module TraversalProccesorWrapper
-  def self.traversal_proccesor(move, board)
-    TraversalProccesor.new(
+module TraversalProcessorWrapper
+  def self.traversal_processor(move, board)
+    TraversalProcessor.new(
       starting_position: move[:starting_position],
       end_position: move[:end_position],
       board:
@@ -78,7 +78,7 @@ module TraversalProccesorWrapper
   end
 end
 
-TraversalProccesorWrapper.traversal_proccesor(
+TraversalProcessorWrapper.traversal_processor(
   Knight.new.knight_moves('d4', 'a1'),
   ChessBoard.new.board
 ).print_path
